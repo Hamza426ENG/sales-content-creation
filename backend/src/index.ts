@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 4000;
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:3001',
-  'https://Hamza426ENG.github.io',
+  'https://hamza426eng.github.io',
   ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : []),
 ];
 app.use(cors({ origin: allowedOrigins }));
