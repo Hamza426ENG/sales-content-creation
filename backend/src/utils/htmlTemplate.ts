@@ -98,8 +98,8 @@ export function wrapInHtml(content: string, title?: string): string {
     /* Stats bar — Plum purple, positioned above fixed footer */
     .cover-stats {
       background: #4A0F70;
-      padding: 24px 50px;
-      margin-bottom: 45px; /* space for fixed footer below */
+      padding: 24px 50px 40px; /* extra bottom padding so labels don't get clipped */
+      margin-bottom: 50px; /* space for fixed footer below */
       display: flex;
       justify-content: space-around;
       align-items: center;
