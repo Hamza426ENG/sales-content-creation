@@ -10,16 +10,17 @@ const c = (hex: string) => hex.replace('#', '');
 
 const COLORS = {
   primary: c(BRAND.colors.primary),
-  primaryDark: c(BRAND.colors.primaryDark),
-  primaryDeep: c(BRAND.colors.primaryDeep),
-  lavender: c(BRAND.colors.lavender),
-  lavenderMid: c(BRAND.colors.lavenderMid),
+  violet: c(BRAND.colors.primaryMid),
+  pale: c(BRAND.colors.primaryPale),
   accent: c(BRAND.colors.accent),
   accentLight: c(BRAND.colors.accentLight),
   gold: c(BRAND.colors.gold),
   dark: c(BRAND.colors.dark),
+  darkBg: c(BRAND.colors.darkBg),
   medium: c(BRAND.colors.medium),
+  muted: c(BRAND.colors.muted),
   light: c(BRAND.colors.light),
+  border: c(BRAND.colors.borderLight),
   white: c(BRAND.colors.white),
 };
 
@@ -75,7 +76,6 @@ export function parseSlideData(content: string): SlideData[] {
     }
   });
 
-  // Add closing slide
   slides.push({
     title: 'Ready to Get Started?',
     subtitle: `Book a Discovery Call Today\n\n${BRAND.website}`,
@@ -86,8 +86,8 @@ export function parseSlideData(content: string): SlideData[] {
 }
 
 function addBrandedFooter(slide: PptxGenJS.Slide, pptx: PptxGenJS, slideNum: number, isDark: boolean) {
-  const footerBg = isDark ? COLORS.primaryDeep : COLORS.light;
-  const footerColor = isDark ? '9CA3AF' : COLORS.medium;
+  const footerBg = isDark ? COLORS.darkBg : COLORS.light;
+  const footerColor = isDark ? COLORS.muted : COLORS.medium;
 
   slide.addShape(pptx.ShapeType.rect, {
     x: 0, y: 6.9, w: '100%', h: 0.6,
@@ -126,49 +126,59 @@ export async function generatePpt(content: string): Promise<Buffer> {
     slideNum++;
 
     if (slideData.layout === 'title') {
-      // ===== COVER SLIDE — Lavender background =====
-      slide.background = { color: COLORS.lavender };
+      // ===== COVER SLIDE — Light gradient-like background =====
+      slide.background = { color: COLORS.light };
 
       // Logo top-left
       try {
         slide.addImage({ path: LOGO_PATH, x: 0.6, y: 0.4, w: 1.6, h: 0.45 });
       } catch { /* */ }
 
-      // "Match Your Ambition" badge top-right
+      // Tagline badge top-right
       slide.addShape(pptx.ShapeType.roundRect, {
-        x: 10, y: 0.35, w: 2.5, h: 0.5,
-        rectRadius: 0.25,
-        line: { color: COLORS.primary, width: 1.5 },
+        x: 10, y: 0.35, w: 2.5, h: 0.45,
+        rectRadius: 0.22,
+        line: { color: COLORS.violet, width: 1.5 },
         fill: { type: 'none' as any },
       });
-      slide.addText(BRAND.tagline, {
-        x: 10, y: 0.35, w: 2.5, h: 0.5,
-        fontSize: 10,
+      slide.addText(BRAND.tagline.toUpperCase(), {
+        x: 10, y: 0.35, w: 2.5, h: 0.45,
+        fontSize: 8,
         fontFace: BRAND.fonts.body,
-        color: COLORS.primary,
+        color: COLORS.violet,
+        bold: true,
+        align: 'center',
+      });
+
+      // Section badge
+      slide.addShape(pptx.ShapeType.roundRect, {
+        x: 0.6, y: 1.6, w: 2.2, h: 0.35,
+        rectRadius: 0.17,
+        fill: { color: 'F0FDF4' },
+        line: { color: 'BBF7D0', width: 1 },
+      });
+      slide.addText('EDGE SALES DOCUMENT', {
+        x: 0.6, y: 1.6, w: 2.2, h: 0.35,
+        fontSize: 7,
+        fontFace: BRAND.fonts.body,
+        color: COLORS.accent,
         bold: true,
         align: 'center',
       });
 
       // Title
       slide.addText(slideData.title, {
-        x: 0.6, y: 1.8, w: 10, h: 1.8,
-        fontSize: 34,
+        x: 0.6, y: 2.2, w: 10, h: 1.8,
+        fontSize: 36,
         fontFace: BRAND.fonts.heading,
         color: COLORS.primary,
         bold: true,
-        lineSpacing: 40,
-      });
-
-      // Dotted line
-      slide.addShape(pptx.ShapeType.line, {
-        x: 0.6, y: 3.7, w: 11.5, h: 0,
-        line: { color: COLORS.medium, width: 1, dashType: 'sysDot' },
+        lineSpacing: 42,
       });
 
       if (slideData.subtitle) {
         slide.addText(slideData.subtitle, {
-          x: 0.6, y: 4.0, w: 7, h: 1.2,
+          x: 0.6, y: 4.2, w: 7, h: 1.0,
           fontSize: 14,
           fontFace: BRAND.fonts.body,
           color: COLORS.medium,
@@ -176,44 +186,28 @@ export async function generatePpt(content: string): Promise<Buffer> {
         });
       }
 
-      // Green callout box
-      slide.addShape(pptx.ShapeType.roundRect, {
-        x: 8, y: 4.0, w: 4.5, h: 1.6,
-        rectRadius: 0.15,
-        fill: { color: COLORS.accentLight },
-      });
-      slide.addText(BRAND.subtitle, {
-        x: 8.3, y: 4.2, w: 3.9, h: 1.2,
-        fontSize: 13,
-        fontFace: BRAND.fonts.body,
-        color: COLORS.primary,
-        bold: true,
-        italic: true,
-        lineSpacing: 20,
-      });
-
       // Stats bar at bottom
       slide.addShape(pptx.ShapeType.rect, {
         x: 0, y: 5.8, w: '100%', h: 1.1,
-        fill: { color: COLORS.primaryDark },
+        fill: { color: COLORS.darkBg },
       });
 
       const stats = [
-        { num: '98%', label: 'collection' },
-        { num: '95%', label: 'first pass' },
-        { num: '70%', label: 'faster hiring' },
-        { num: '40%', label: 'cost reduction' },
+        { num: '97%', label: 'retention rate' },
+        { num: '7 days', label: 'avg. match' },
+        { num: '60-70%', label: 'cost savings' },
+        { num: '2-4%', label: 'acceptance rate' },
       ];
       stats.forEach((stat, i) => {
         const xPos = 1 + i * 3;
         slide.addText(stat.num, {
           x: xPos, y: 5.85, w: 2.5, h: 0.6,
-          fontSize: 28, fontFace: BRAND.fonts.heading,
+          fontSize: 26, fontFace: BRAND.fonts.heading,
           color: COLORS.gold, bold: true, align: 'center',
         });
         slide.addText(stat.label, {
           x: xPos, y: 6.4, w: 2.5, h: 0.35,
-          fontSize: 10, fontFace: BRAND.fonts.body,
+          fontSize: 9, fontFace: BRAND.fonts.body,
           color: 'FFFFFF', align: 'center',
         });
       });
@@ -221,8 +215,8 @@ export async function generatePpt(content: string): Promise<Buffer> {
       addBrandedFooter(slide, pptx, slideNum, true);
 
     } else if (slideData.layout === 'closing') {
-      // ===== CLOSING SLIDE — Dark purple =====
-      slide.background = { color: COLORS.primaryDeep };
+      // ===== CLOSING SLIDE — Dark background =====
+      slide.background = { color: COLORS.darkBg };
 
       try {
         slide.addImage({ path: LOGO_PATH, x: 0.6, y: 0.4, w: 1.6, h: 0.45 });
@@ -236,7 +230,7 @@ export async function generatePpt(content: string): Promise<Buffer> {
 
       // Green underline
       slide.addShape(pptx.ShapeType.rect, {
-        x: 5.5, y: 3.3, w: 2.3, h: 0.05,
+        x: 5.5, y: 3.3, w: 2.3, h: 0.04,
         fill: { color: COLORS.accent },
       });
 
@@ -252,13 +246,13 @@ export async function generatePpt(content: string): Promise<Buffer> {
       slide.addText(`${BRAND.address}`, {
         x: 2, y: 5.5, w: 9.33, h: 0.4,
         fontSize: 10, fontFace: BRAND.fonts.body,
-        color: '9CA3AF', align: 'center',
+        color: COLORS.muted, align: 'center',
       });
 
       addBrandedFooter(slide, pptx, slideNum, true);
 
     } else if (slideData.layout === 'section') {
-      // ===== SECTION DIVIDER — Purple =====
+      // ===== SECTION DIVIDER — Plum purple =====
       slide.background = { color: COLORS.primary };
 
       try {
@@ -271,9 +265,8 @@ export async function generatePpt(content: string): Promise<Buffer> {
         color: COLORS.white, bold: true,
       });
 
-      // Green underline
       slide.addShape(pptx.ShapeType.rect, {
-        x: 0.8, y: 4.1, w: 3, h: 0.05,
+        x: 0.8, y: 4.1, w: 3, h: 0.04,
         fill: { color: COLORS.accent },
       });
 
@@ -290,15 +283,15 @@ export async function generatePpt(content: string): Promise<Buffer> {
 
       // Badge top-right
       slide.addShape(pptx.ShapeType.roundRect, {
-        x: 10.5, y: 0.2, w: 2.2, h: 0.45,
-        rectRadius: 0.22,
-        line: { color: COLORS.primary, width: 1 },
+        x: 10.5, y: 0.2, w: 2.2, h: 0.4,
+        rectRadius: 0.2,
+        line: { color: COLORS.violet, width: 1 },
         fill: { type: 'none' as any },
       });
-      slide.addText(BRAND.tagline, {
-        x: 10.5, y: 0.2, w: 2.2, h: 0.45,
-        fontSize: 8, fontFace: BRAND.fonts.body,
-        color: COLORS.primary, bold: true, align: 'center',
+      slide.addText(BRAND.tagline.toUpperCase(), {
+        x: 10.5, y: 0.2, w: 2.2, h: 0.4,
+        fontSize: 7, fontFace: BRAND.fonts.body,
+        color: COLORS.violet, bold: true, align: 'center',
       });
 
       // Title
@@ -310,7 +303,7 @@ export async function generatePpt(content: string): Promise<Buffer> {
 
       // Green underline
       slide.addShape(pptx.ShapeType.rect, {
-        x: 0.6, y: 1.75, w: 1.5, h: 0.04,
+        x: 0.6, y: 1.75, w: 1.5, h: 0.035,
         fill: { color: COLORS.accent },
       });
 
@@ -326,11 +319,12 @@ export async function generatePpt(content: string): Promise<Buffer> {
           },
         }));
 
-        // Light green card background for bullets
+        // Light card background for bullets
         slide.addShape(pptx.ShapeType.roundRect, {
           x: 0.5, y: 2.0, w: 12.3, h: 4.5,
-          rectRadius: 0.15,
-          fill: { color: COLORS.accentLight },
+          rectRadius: 0.12,
+          fill: { color: COLORS.light },
+          line: { color: COLORS.border, width: 1 },
         });
 
         slide.addText(bulletRows, {

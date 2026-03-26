@@ -17,7 +17,7 @@ export async function generateWord(content: string): Promise<Buffer> {
     footer: true,
     pageNumber: true,
     title: title,
-    font: 'Open Sans',
+    font: 'DM Sans',
     fontSize: 22,
   });
   return Buffer.from(docxBuffer as ArrayBuffer);

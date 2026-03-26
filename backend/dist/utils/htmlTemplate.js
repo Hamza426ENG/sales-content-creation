@@ -1,12 +1,13 @@
-import { BRAND, getLogoBase64, getLogoWhiteBase64, getLogoPurpleBase64 } from './brand';
-
-export function wrapInHtml(content: string, title?: string): string {
-  const logoBase64 = getLogoBase64();
-  const logoPurpleBase64 = getLogoPurpleBase64();
-  const logoWhiteBase64 = getLogoWhiteBase64();
-  const docTitle = title || 'Sales Content';
-
-  return `<!DOCTYPE html>
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.wrapInHtml = wrapInHtml;
+const brand_1 = require("./brand");
+function wrapInHtml(content, title) {
+    const logoBase64 = (0, brand_1.getLogoBase64)();
+    const logoPurpleBase64 = (0, brand_1.getLogoPurpleBase64)();
+    const logoWhiteBase64 = (0, brand_1.getLogoWhiteBase64)();
+    const docTitle = title || 'Sales Content';
+    return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -19,21 +20,21 @@ export function wrapInHtml(content: string, title?: string): string {
     @page { margin: 0; size: A4; }
 
     :root {
-      --primary: ${BRAND.colors.primary};
-      --violet: ${BRAND.colors.primaryMid};
-      --accent: ${BRAND.colors.accent};
-      --gold: ${BRAND.colors.gold};
-      --text: ${BRAND.colors.dark};
-      --text-s: ${BRAND.colors.medium};
-      --text-m: ${BRAND.colors.muted};
-      --border: ${BRAND.colors.border};
-      --border-light: ${BRAND.colors.borderLight};
-      --bg: ${BRAND.colors.light};
-      --dark-bg: ${BRAND.colors.darkBg};
+      --primary: ${brand_1.BRAND.colors.primary};
+      --violet: ${brand_1.BRAND.colors.primaryMid};
+      --accent: ${brand_1.BRAND.colors.accent};
+      --gold: ${brand_1.BRAND.colors.gold};
+      --text: ${brand_1.BRAND.colors.dark};
+      --text-s: ${brand_1.BRAND.colors.medium};
+      --text-m: ${brand_1.BRAND.colors.muted};
+      --border: ${brand_1.BRAND.colors.border};
+      --border-light: ${brand_1.BRAND.colors.borderLight};
+      --bg: ${brand_1.BRAND.colors.light};
+      --dark-bg: ${brand_1.BRAND.colors.darkBg};
     }
 
     body {
-      font-family: '${BRAND.fonts.body}', system-ui, -apple-system, sans-serif;
+      font-family: '${brand_1.BRAND.fonts.body}', system-ui, -apple-system, sans-serif;
       line-height: 1.7;
       color: var(--text);
       -webkit-font-smoothing: antialiased;
@@ -316,14 +317,14 @@ export function wrapInHtml(content: string, title?: string): string {
   <!-- COVER PAGE -->
   <div class="cover-page">
     <div class="cover-header">
-      <img src="${logoPurpleBase64}" alt="${BRAND.company}" />
-      <span class="tagline">${BRAND.tagline}</span>
+      <img src="${logoPurpleBase64}" alt="${brand_1.BRAND.company}" />
+      <span class="tagline">${brand_1.BRAND.tagline}</span>
     </div>
     <div class="cover-content">
       <div class="cover-badge">Edge Sales Document</div>
       <div class="cover-title">${docTitle}</div>
       <div class="cover-subtitle">
-        ${BRAND.subtitle}. Edge provides dedicated, campus-based professionals who integrate into your workflows — fully managed, HIPAA compliant, and ready from day one.
+        ${brand_1.BRAND.subtitle}. Edge provides dedicated, campus-based professionals who integrate into your workflows — fully managed, HIPAA compliant, and ready from day one.
       </div>
     </div>
     <div class="cover-stats">
@@ -336,8 +337,8 @@ export function wrapInHtml(content: string, title?: string): string {
 
   <!-- CONTENT PAGES -->
   <div class="page-header">
-    <img src="${logoPurpleBase64}" alt="${BRAND.company}" />
-    <span class="header-badge">${BRAND.tagline}</span>
+    <img src="${logoPurpleBase64}" alt="${brand_1.BRAND.company}" />
+    <span class="header-badge">${brand_1.BRAND.tagline}</span>
   </div>
 
   <div class="content-body">
@@ -347,15 +348,16 @@ export function wrapInHtml(content: string, title?: string): string {
   <!-- FOOTER -->
   <div class="page-footer">
     <div>
-      <img src="${logoWhiteBase64}" alt="${BRAND.company}" />
-      <div style="margin-top: 3px;">${BRAND.address}</div>
-      <div>${BRAND.website}</div>
+      <img src="${logoWhiteBase64}" alt="${brand_1.BRAND.company}" />
+      <div style="margin-top: 3px;">${brand_1.BRAND.address}</div>
+      <div>${brand_1.BRAND.website}</div>
     </div>
     <div class="footer-right">
-      &copy; ${new Date().getFullYear()} ${BRAND.fullName}.<br/>All rights reserved.
+      &copy; ${new Date().getFullYear()} ${brand_1.BRAND.fullName}.<br/>All rights reserved.
     </div>
   </div>
 
 </body>
 </html>`;
 }
+//# sourceMappingURL=htmlTemplate.js.map
