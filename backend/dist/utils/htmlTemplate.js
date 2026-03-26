@@ -11,237 +11,327 @@ function wrapInHtml(content, title) {
 <head>
   <meta charset="UTF-8">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap');
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    @page {
-      size: A4;
-      margin: 20mm 0 22mm 0;
-    }
+    @page { margin: 0; size: A4; }
+
     body {
       font-family: 'DM Sans', system-ui, sans-serif;
-      line-height: 1.65;
+      line-height: 1.7;
       color: #111827;
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ======== RUNNING HEADER (top of every page) ======== */
-    .running-header {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      height: 18mm;
-      padding: 10px 50px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid #F0F0F4;
-      background: #fff;
-    }
-    .running-header img { height: 20px; }
-    .running-header .badge {
-      font-size: 8px;
-      color: #4A0F70;
-      border: 1.5px solid #4A0F70;
-      border-radius: 100px;
-      padding: 3px 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-    }
-
-    /* ======== RUNNING FOOTER (bottom of every page) ======== */
-    .running-footer {
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      height: 20mm;
-      padding: 8px 50px;
-      font-size: 8px;
-      color: rgba(255,255,255,0.75);
-      background: #4A0F70;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .running-footer img { height: 13px; }
-
-    /* ======== COVER SECTION (first page content) ======== */
-    .cover {
+    /* ========== COVER PAGE ========== */
+    .cover-page {
+      width: 100%;
+      height: 297mm; /* A4 height */
       background: #E5D9F9;
-      margin: -20mm 0 0 0;
-      padding: 30px 50px 0;
-      min-height: calc(100vh + 20mm);
       display: flex;
       flex-direction: column;
       page-break-after: always;
+      position: relative;
+      overflow: hidden;
     }
-    .cover-top {
+
+    .cover-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding-bottom: 30px;
+      padding: 30px 50px;
     }
-    .cover-top img { height: 28px; }
-    .cover-top .tagline {
-      font-size: 10px;
+    .cover-header img { height: 28px; }
+    .cover-header .tagline {
+      font-size: 11px;
       font-weight: 700;
       color: #4A0F70;
       border: 1.5px solid #4A0F70;
       border-radius: 100px;
-      padding: 5px 14px;
+      padding: 5px 16px;
       text-transform: uppercase;
       letter-spacing: 1.5px;
     }
+
+    .cover-body {
+      padding: 50px 50px 0;
+      flex: 1;
+    }
     .cover-title {
-      font-size: 36px;
+      font-size: 38px;
       font-weight: 800;
       color: #4A0F70;
-      line-height: 1.12;
+      line-height: 1.15;
       letter-spacing: -0.5px;
-      max-width: 560px;
-      margin-bottom: 8px;
+      max-width: 580px;
+      margin-bottom: 10px;
     }
-    .cover-line {
+    .cover-dotted {
       border: none;
       border-top: 2px dotted #9CA3AF;
-      margin: 16px 0;
+      margin: 18px 0 20px;
       opacity: 0.35;
     }
     .cover-desc {
-      font-size: 13px;
+      font-size: 14px;
       color: #4B5563;
       line-height: 1.7;
-      max-width: 440px;
+      max-width: 460px;
     }
-    .cover-quote {
+
+    /* Green callout */
+    .cover-callout {
       background: #ECFDF5;
-      border-radius: 10px;
-      padding: 16px 20px;
-      margin-top: 20px;
+      border-radius: 12px;
+      padding: 18px 22px;
+      margin-top: 24px;
       max-width: 400px;
     }
-    .cover-quote p {
-      font-size: 12px;
+    .cover-callout p {
+      font-size: 13px;
       font-weight: 600;
       color: #4A0F70;
       font-style: italic;
       line-height: 1.5;
       margin: 0;
     }
-    .cover-bottom {
-      margin-top: auto;
-    }
+
+    /* Stats bar — Plum purple, positioned above fixed footer */
     .cover-stats {
       background: #4A0F70;
-      margin: 0 -50px;
-      padding: 20px 50px;
+      padding: 24px 50px;
+      margin-bottom: 45px; /* space for fixed footer below */
       display: flex;
       justify-content: space-around;
+      align-items: center;
     }
     .cover-stat { text-align: center; }
-    .cover-stat .n { font-size: 24px; font-weight: 800; color: #D97706; }
-    .cover-stat .l { font-size: 9px; color: rgba(255,255,255,0.8); margin-top: 2px; }
+    .cover-stat .num {
+      font-size: 26px;
+      font-weight: 800;
+      color: #D97706;
+    }
+    .cover-stat .lbl {
+      font-size: 10px;
+      color: rgba(255,255,255,0.8);
+      margin-top: 3px;
+    }
 
-    /* ======== MAIN CONTENT ======== */
-    .main-content {
-      padding: 8px 50px 10px;
+    /* Cover footer — hidden since fixed page-footer covers all pages */
+    .cover-footer { display: none; }
+
+    /* ========== CONTENT PAGES ========== */
+    .content-page {
+      padding: 0 0 60px;
+      page-break-before: auto;
+    }
+
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 50px;
+      border-bottom: 1px solid #F0F0F4;
+      margin-bottom: 10px;
+    }
+    .page-header img { height: 22px; }
+    .page-header .badge {
+      font-size: 9px;
+      color: #4A0F70;
+      border: 1.5px solid #4A0F70;
+      border-radius: 100px;
+      padding: 4px 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    .content-body {
+      padding: 10px 50px 100px; /* extra bottom padding for footer */
     }
 
     /* Typography */
-    h1 { font-size: 24px; font-weight: 800; color: #4A0F70; margin-bottom: 6px; letter-spacing: -0.3px; }
+    h1 {
+      font-size: 26px;
+      font-weight: 800;
+      color: #4A0F70;
+      margin-bottom: 6px;
+      letter-spacing: -0.4px;
+    }
     h2 {
-      font-size: 17px; font-weight: 700; color: #4A0F70;
-      margin-top: 24px; margin-bottom: 8px;
-      padding-bottom: 8px; position: relative;
-      page-break-after: avoid;
+      font-size: 19px;
+      font-weight: 700;
+      color: #4A0F70;
+      margin-top: 28px;
+      margin-bottom: 10px;
+      position: relative;
+      padding-bottom: 10px;
     }
     h2::after {
-      content: ''; position: absolute; bottom: 0; left: 0;
-      width: 45px; height: 3px; background: #059669; border-radius: 2px;
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 50px; height: 3px;
+      background: #059669;
+      border-radius: 2px;
     }
     h3 {
-      font-size: 13px; font-weight: 700; color: #111827;
-      margin-top: 16px; margin-bottom: 4px;
-      page-break-after: avoid;
+      font-size: 14px;
+      font-weight: 700;
+      color: #111827;
+      margin-top: 20px;
+      margin-bottom: 6px;
     }
-    p { margin-bottom: 8px; font-size: 11.5px; color: #4B5563; line-height: 1.65; }
-    ul, ol { margin-bottom: 10px; padding-left: 18px; }
-    li { margin-bottom: 3px; font-size: 11.5px; color: #4B5563; line-height: 1.6; }
+    p {
+      margin-bottom: 10px;
+      font-size: 12.5px;
+      color: #4B5563;
+      line-height: 1.7;
+    }
+    ul, ol {
+      margin-bottom: 12px;
+      padding-left: 20px;
+    }
+    li {
+      margin-bottom: 4px;
+      font-size: 12.5px;
+      color: #4B5563;
+      line-height: 1.6;
+    }
     li::marker { color: #059669; }
     strong { font-weight: 700; color: #111827; }
     em { font-style: italic; color: #4A0F70; }
 
-    /* Blockquotes */
+    /* Blockquotes — green callout per brand guidelines */
     blockquote {
-      background: #ECFDF5; border-radius: 10px;
-      padding: 14px 18px; margin: 12px 0; border: none;
-      page-break-inside: avoid;
+      background: #ECFDF5;
+      border-radius: 12px;
+      padding: 18px 22px;
+      margin: 14px 0;
+      border: none;
     }
-    blockquote p { color: #4A0F70; font-weight: 600; font-style: italic; font-size: 12px; margin: 0; }
+    blockquote p {
+      color: #4A0F70;
+      font-weight: 600;
+      font-style: italic;
+      font-size: 13px;
+      margin: 0;
+    }
 
     /* Tables */
     table {
-      width: 100%; border-collapse: separate; border-spacing: 0;
-      margin: 12px 0; border-radius: 8px; overflow: hidden;
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin: 14px 0;
+      border-radius: 10px;
+      overflow: hidden;
       border: 1.5px solid #E9E9ED;
-      page-break-inside: avoid;
     }
     th {
-      background: #E5D9F9; font-weight: 700; color: #4A0F70;
-      padding: 8px 12px; text-align: left; font-size: 10px;
+      background: #E5D9F9;
+      font-weight: 700;
+      color: #4A0F70;
+      padding: 10px 14px;
+      text-align: left;
+      font-size: 11px;
       border-bottom: 2px solid #059669;
     }
-    td { padding: 7px 12px; font-size: 10.5px; color: #4B5563; border-bottom: 1px solid #F0F0F4; }
+    td {
+      padding: 9px 14px;
+      font-size: 11.5px;
+      color: #4B5563;
+      border-bottom: 1px solid #F0F0F4;
+    }
     tr:last-child td { border-bottom: none; }
 
-    hr { border: none; border-top: 2px dotted #9CA3AF; margin: 18px 0; opacity: 0.2; }
+    /* Dotted divider */
+    hr {
+      border: none;
+      border-top: 2px dotted #9CA3AF;
+      margin: 22px 0;
+      opacity: 0.25;
+    }
+
+    /* ========== PAGE FOOTER — fixed on every page except cover ========== */
+    .page-footer {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      padding: 12px 50px;
+      font-size: 9px;
+      color: rgba(255,255,255,0.75);
+      background: #4A0F70;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .page-footer img { height: 14px; }
+    .footer-right { text-align: right; }
+
+    /* Hide fixed footer on cover page (cover has its own footer) */
+    .cover-page ~ .page-footer { display: flex; }
+    @media print {
+      .cover-page { page-break-after: always; }
+    }
   </style>
 </head>
 <body>
 
-  <!-- Running header (appears on every page via position:fixed) -->
-  <div class="running-header">
-    <img src="${logoPurpleBase64}" alt="Edge" />
-    <span class="badge">${brand_1.BRAND.tagline}</span>
-  </div>
-
-  <!-- Running footer (appears on every page via position:fixed) -->
-  <div class="running-footer">
-    <div>
-      <img src="${logoWhiteBase64}" alt="Edge" />
-      <div style="margin-top:2px">${brand_1.BRAND.address}</div>
-      <div>${brand_1.BRAND.website}</div>
-    </div>
-    <div style="text-align:right">
-      &copy; ${new Date().getFullYear()} ${brand_1.BRAND.fullName}.<br/>All rights reserved.
-    </div>
-  </div>
-
   <!-- COVER PAGE -->
-  <div class="cover">
-    <div class="cover-top">
-      <img src="${logoPurpleBase64}" alt="Edge" />
+  <div class="cover-page">
+    <div class="cover-header">
+      <img src="${logoPurpleBase64}" alt="${brand_1.BRAND.company}" />
       <span class="tagline">${brand_1.BRAND.tagline}</span>
     </div>
-    <div class="cover-title">${docTitle}</div>
-    <hr class="cover-line" />
-    <div class="cover-desc">
-      ${brand_1.BRAND.subtitle}. Edge provides dedicated, campus-based professionals who integrate into your workflows — fully managed, HIPAA compliant, and ready from day one.
+    <div class="cover-body">
+      <div class="cover-title">${docTitle}</div>
+      <hr class="cover-dotted" />
+      <div class="cover-desc">
+        ${brand_1.BRAND.subtitle}. Edge provides dedicated, campus-based professionals who integrate into your workflows — fully managed, HIPAA compliant, and ready from day one.
+      </div>
+      <div class="cover-callout">
+        <p>"Edge is in a tier of their own and then there's everybody else."<br/>— Jose Melendez, President, Melendez Insurance Group</p>
+      </div>
     </div>
-    <div class="cover-quote">
-      <p>"Edge is in a tier of their own and then there's everybody else."<br/>— Jose Melendez, President, Melendez Insurance Group</p>
+    <div class="cover-stats">
+      <div class="cover-stat"><div class="num">97%</div><div class="lbl">retention rate</div></div>
+      <div class="cover-stat"><div class="num">7 days</div><div class="lbl">avg. match time</div></div>
+      <div class="cover-stat"><div class="num">60-70%</div><div class="lbl">cost savings</div></div>
+      <div class="cover-stat"><div class="num">2-4%</div><div class="lbl">acceptance rate</div></div>
     </div>
-    <div class="cover-bottom">
-      <div class="cover-stats">
-        <div class="cover-stat"><div class="n">97%</div><div class="l">retention rate</div></div>
-        <div class="cover-stat"><div class="n">7 days</div><div class="l">avg. match time</div></div>
-        <div class="cover-stat"><div class="n">60-70%</div><div class="l">cost savings</div></div>
-        <div class="cover-stat"><div class="n">2-4%</div><div class="l">acceptance rate</div></div>
+    <div class="cover-footer">
+      <div>
+        <img src="${logoWhiteBase64}" alt="${brand_1.BRAND.company}" />
+        <div style="margin-top:2px">${brand_1.BRAND.address}</div>
+        <div>${brand_1.BRAND.website}</div>
+      </div>
+      <div style="text-align:right">
+        &copy; ${new Date().getFullYear()} ${brand_1.BRAND.fullName}.<br/>All rights reserved.
       </div>
     </div>
   </div>
 
-  <!-- CONTENT -->
-  <div class="main-content">
-    ${content}
+  <!-- CONTENT PAGES -->
+  <div class="content-page">
+    <div class="page-header">
+      <img src="${logoPurpleBase64}" alt="${brand_1.BRAND.company}" />
+      <span class="badge">${brand_1.BRAND.tagline}</span>
+    </div>
+    <div class="content-body">
+      ${content}
+    </div>
+  </div>
+
+  <!-- FIXED FOOTER on content pages -->
+  <div class="page-footer">
+    <div>
+      <img src="${logoWhiteBase64}" alt="${brand_1.BRAND.company}" />
+      <div style="margin-top:2px">${brand_1.BRAND.address}</div>
+      <div>${brand_1.BRAND.website}</div>
+    </div>
+    <div class="footer-right">
+      &copy; ${new Date().getFullYear()} ${brand_1.BRAND.fullName}.<br/>All rights reserved.
+    </div>
   </div>
 
 </body>
