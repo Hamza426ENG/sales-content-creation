@@ -95,10 +95,11 @@ export function wrapInHtml(content: string, title?: string): string {
       margin: 0;
     }
 
-    /* Stats bar — Plum purple */
+    /* Stats bar — Plum purple, positioned above fixed footer */
     .cover-stats {
       background: #4A0F70;
       padding: 24px 50px;
+      margin-bottom: 45px; /* space for fixed footer below */
       display: flex;
       justify-content: space-around;
       align-items: center;
@@ -115,18 +116,8 @@ export function wrapInHtml(content: string, title?: string): string {
       margin-top: 3px;
     }
 
-    /* Cover footer */
-    .cover-footer {
-      background: #4A0F70;
-      padding: 12px 50px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 9px;
-      color: rgba(255,255,255,0.7);
-      border-top: 1px solid rgba(255,255,255,0.1);
-    }
-    .cover-footer img { height: 14px; }
+    /* Cover footer — hidden since fixed page-footer covers all pages */
+    .cover-footer { display: none; }
 
     /* ========== CONTENT PAGES ========== */
     .content-page {
@@ -261,7 +252,7 @@ export function wrapInHtml(content: string, title?: string): string {
       opacity: 0.25;
     }
 
-    /* ========== PAGE FOOTER — fixed on every page ========== */
+    /* ========== PAGE FOOTER — fixed on every page except cover ========== */
     .page-footer {
       position: fixed;
       bottom: 0; left: 0; right: 0;
@@ -275,6 +266,12 @@ export function wrapInHtml(content: string, title?: string): string {
     }
     .page-footer img { height: 14px; }
     .footer-right { text-align: right; }
+
+    /* Hide fixed footer on cover page (cover has its own footer) */
+    .cover-page ~ .page-footer { display: flex; }
+    @media print {
+      .cover-page { page-break-after: always; }
+    }
   </style>
 </head>
 <body>
