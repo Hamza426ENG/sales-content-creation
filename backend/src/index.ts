@@ -9,7 +9,12 @@ import { errorHandler } from './middleware/errorHandler';
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-app.use(cors({ origin: ['http://localhost:3000', 'http://localhost:3001'] }));
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:3001',
+  ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : []),
+];
+app.use(cors({ origin: allowedOrigins }));
 app.use(express.json({ limit: '10mb' }));
 
 app.use('/api', contentRoutes);

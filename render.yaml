@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: sales-content-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    envVars:
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: CLAUDE_PROJECT_ID
+        value: "019c98f7-f5d3-72a9-947d-d23be439e754"
+      - key: PORT
+        value: "4000"
+      - key: NODE_ENV
+        value: "production"

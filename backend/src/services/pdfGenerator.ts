@@ -13,7 +13,10 @@ export async function generatePdf(content: string): Promise<Buffer> {
   const title = extractTitle(content);
   const html = wrapInHtml(content, title);
   const browser = await puppeteer.launch({
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu'],
+    ...(process.env.PUPPETEER_EXECUTABLE_PATH
+      ? { executablePath: process.env.PUPPETEER_EXECUTABLE_PATH }
+      : {}),
   });
 
   try {
