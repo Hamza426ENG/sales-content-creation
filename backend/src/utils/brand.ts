@@ -47,11 +47,25 @@ export const BRAND = {
 };
 
 export function getLogoSvgPath(): string {
-  return path.join(__dirname, '../../assets/logo.svg');
+  // Try multiple paths since __dirname differs between src/ and dist/
+  const candidates = [
+    path.join(__dirname, '../../assets/logo.svg'),
+    path.join(__dirname, '../../../assets/logo.svg'),
+    path.join(process.cwd(), 'assets/logo.svg'),
+  ];
+  for (const p of candidates) {
+    if (fs.existsSync(p)) return p;
+  }
+  return candidates[0];
 }
 
 export function getLogoSvg(): string {
-  return fs.readFileSync(getLogoSvgPath(), 'utf-8');
+  try {
+    return fs.readFileSync(getLogoSvgPath(), 'utf-8');
+  } catch {
+    // Fallback: inline minimal Edge SVG if file not found
+    return '<svg xmlns="http://www.w3.org/2000/svg" width="120" height="28" viewBox="0 0 100 23"><text x="0" y="18" font-family="DM Sans,sans-serif" font-size="20" font-weight="800" fill="#000000">EDGE</text></svg>';
+  }
 }
 
 export function getLogoBase64(): string {

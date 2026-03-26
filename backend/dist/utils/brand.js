@@ -53,10 +53,26 @@ exports.BRAND = {
     },
 };
 function getLogoSvgPath() {
-    return path_1.default.join(__dirname, '../../assets/logo.svg');
+    // Try multiple paths since __dirname differs between src/ and dist/
+    const candidates = [
+        path_1.default.join(__dirname, '../../assets/logo.svg'),
+        path_1.default.join(__dirname, '../../../assets/logo.svg'),
+        path_1.default.join(process.cwd(), 'assets/logo.svg'),
+    ];
+    for (const p of candidates) {
+        if (fs_1.default.existsSync(p))
+            return p;
+    }
+    return candidates[0];
 }
 function getLogoSvg() {
-    return fs_1.default.readFileSync(getLogoSvgPath(), 'utf-8');
+    try {
+        return fs_1.default.readFileSync(getLogoSvgPath(), 'utf-8');
+    }
+    catch {
+        // Fallback: inline minimal Edge SVG if file not found
+        return '<svg xmlns="http://www.w3.org/2000/svg" width="120" height="28" viewBox="0 0 100 23"><text x="0" y="18" font-family="DM Sans,sans-serif" font-size="20" font-weight="800" fill="#000000">EDGE</text></svg>';
+    }
 }
 function getLogoBase64() {
     const svgContent = getLogoSvg();
