@@ -27,7 +27,7 @@ export async function generatePdf(content: string): Promise<Buffer> {
     const pdfBuffer = await page.pdf({
       format: 'A4',
       printBackground: true,
-      margin: { top: '0mm', bottom: '0mm', left: '0mm', right: '0mm' },
+      margin: { top: '20mm', bottom: '22mm', left: '0mm', right: '0mm' },
     });
     return Buffer.from(pdfBuffer);
   } finally {
