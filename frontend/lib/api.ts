@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://sales-content-creation-production.up.railway.app';
 
 export async function generateContent(prompt: string, format: string) {
   const res = await fetch(`${API_URL}/api/generate`, {

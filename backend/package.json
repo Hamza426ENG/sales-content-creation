@@ -14,12 +14,15 @@
   "type": "commonjs",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.80.0",
+    "@sparticuz/chromium": "^143.0.4",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "html-to-docx": "^1.8.0",
+    "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.7",
     "pptxgenjs": "^4.0.1",
-    "puppeteer": "^24.40.0",
+    "puppeteer-core": "^24.40.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {

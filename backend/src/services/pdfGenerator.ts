@@ -1,4 +1,5 @@
-import puppeteer from 'puppeteer';
+import puppeteer from 'puppeteer-core';
+import chromium from '@sparticuz/chromium';
 import { wrapInHtml } from '../utils/htmlTemplate';
 
 function extractTitle(content: string): string {
@@ -12,11 +13,12 @@ function extractTitle(content: string): string {
 export async function generatePdf(content: string): Promise<Buffer> {
   const title = extractTitle(content);
   const html = wrapInHtml(content, title);
+
   const browser = await puppeteer.launch({
-    args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu'],
-    ...(process.env.PUPPETEER_EXECUTABLE_PATH
-      ? { executablePath: process.env.PUPPETEER_EXECUTABLE_PATH }
-      : {}),
+    args: chromium.args,
+    defaultViewport: { width: 1280, height: 720 },
+    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || await chromium.executablePath(),
+    headless: true,
   });
 
   try {
