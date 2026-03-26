@@ -19,21 +19,24 @@ export function wrapInHtml(content: string, title?: string): string {
     @page { margin: 0; size: A4; }
 
     :root {
-      --primary: ${BRAND.colors.primary};
-      --violet: ${BRAND.colors.primaryMid};
-      --accent: ${BRAND.colors.accent};
-      --gold: ${BRAND.colors.gold};
-      --text: ${BRAND.colors.dark};
-      --text-s: ${BRAND.colors.medium};
-      --text-m: ${BRAND.colors.muted};
-      --border: ${BRAND.colors.border};
-      --border-light: ${BRAND.colors.borderLight};
-      --bg: ${BRAND.colors.light};
-      --dark-bg: ${BRAND.colors.darkBg};
+      --plum: #4A0F70;
+      --amethyst: #914DE8;
+      --violet: #7C3AED;
+      --mauve: #C6AAFC;
+      --lilac-pale: #E5D9F9;
+      --accent: #059669;
+      --accent-light: #ECFDF5;
+      --gold: #D97706;
+      --text: #111827;
+      --text-s: #4B5563;
+      --text-m: #9CA3AF;
+      --border: #E9E9ED;
+      --border-light: #F0F0F4;
+      --bg: #FAFAFA;
     }
 
     body {
-      font-family: '${BRAND.fonts.body}', system-ui, -apple-system, sans-serif;
+      font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
       line-height: 1.7;
       color: var(--text);
       -webkit-font-smoothing: antialiased;
@@ -43,7 +46,7 @@ export function wrapInHtml(content: string, title?: string): string {
     .cover-page {
       width: 100%;
       min-height: 100vh;
-      background: linear-gradient(175deg, rgba(124,58,237,0.06) 0%, #fff 60%);
+      background: var(--lilac-pale);
       display: flex;
       flex-direction: column;
       padding: 0;
@@ -63,8 +66,8 @@ export function wrapInHtml(content: string, title?: string): string {
     .cover-header .tagline {
       font-size: 11px;
       font-weight: 700;
-      color: var(--violet);
-      border: 1.5px solid var(--violet);
+      color: var(--plum);
+      border: 1.5px solid var(--plum);
       border-radius: 100px;
       padding: 5px 16px;
       text-transform: uppercase;
@@ -72,56 +75,61 @@ export function wrapInHtml(content: string, title?: string): string {
     }
 
     .cover-content {
-      padding: 80px 50px 40px;
+      padding: 60px 50px 40px;
       flex: 1;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
     }
 
-    .cover-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 5px 13px;
-      border-radius: 100px;
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1.8px;
-      color: var(--accent);
-      background: rgba(5,150,105,0.06);
-      border: 1px solid rgba(5,150,105,0.15);
-      margin-bottom: 20px;
-      width: fit-content;
-    }
-
     .cover-title {
-      font-size: 42px;
+      font-size: 40px;
       font-weight: 800;
-      color: var(--primary);
-      margin-bottom: 16px;
-      line-height: 1.08;
+      color: var(--plum);
+      margin-bottom: 12px;
+      line-height: 1.15;
       letter-spacing: -0.6px;
       max-width: 600px;
     }
 
-    .cover-subtitle {
-      font-size: 16px;
-      font-weight: 500;
-      color: var(--text-s);
-      line-height: 1.7;
-      max-width: 520px;
-      margin-bottom: 40px;
+    .cover-dotted-line {
+      border: none;
+      border-top: 2px dotted var(--text-m);
+      margin: 20px 0 24px 0;
+      opacity: 0.3;
     }
 
+    .cover-description {
+      font-size: 14px;
+      color: var(--text-s);
+      line-height: 1.7;
+      max-width: 480px;
+    }
+
+    /* Green callout box on cover */
+    .cover-callout {
+      background: var(--accent-light);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-top: 28px;
+      max-width: 380px;
+    }
+
+    .cover-callout p {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--plum);
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    /* Stats bar at bottom of cover — uses Plum purple */
     .cover-stats {
-      background: var(--dark-bg);
+      background: var(--plum);
       padding: 28px 50px;
       display: flex;
       justify-content: space-around;
       align-items: center;
-      margin-top: auto;
     }
 
     .cover-stat { text-align: center; }
@@ -134,7 +142,7 @@ export function wrapInHtml(content: string, title?: string): string {
 
     .cover-stat .label {
       font-size: 10px;
-      color: rgba(255,255,255,0.45);
+      color: rgba(255,255,255,0.75);
       margin-top: 4px;
       font-weight: 500;
     }
@@ -145,15 +153,16 @@ export function wrapInHtml(content: string, title?: string): string {
       align-items: center;
       justify-content: space-between;
       padding: 20px 50px;
+      border-bottom: 1px solid var(--border-light);
       margin-bottom: 10px;
     }
 
-    .page-header img { height: 20px; }
+    .page-header img { height: 22px; }
 
     .page-header .header-badge {
       font-size: 9px;
-      color: var(--violet);
-      border: 1.5px solid var(--violet);
+      color: var(--plum);
+      border: 1.5px solid var(--plum);
       border-radius: 100px;
       padding: 4px 14px;
       font-weight: 700;
@@ -167,18 +176,17 @@ export function wrapInHtml(content: string, title?: string): string {
     h1 {
       font-size: 28px;
       font-weight: 800;
-      color: var(--primary);
+      color: var(--plum);
       margin-bottom: 8px;
       letter-spacing: -0.4px;
     }
 
     h2 {
       font-size: 20px;
-      font-weight: 800;
-      color: var(--primary);
-      margin-top: 32px;
+      font-weight: 700;
+      color: var(--plum);
+      margin-top: 30px;
       margin-bottom: 10px;
-      letter-spacing: -0.3px;
       position: relative;
       padding-bottom: 10px;
     }
@@ -223,27 +231,21 @@ export function wrapInHtml(content: string, title?: string): string {
 
     li::marker { color: var(--accent); }
 
-    strong {
-      font-weight: 700;
-      color: var(--text);
-    }
+    strong { font-weight: 700; color: var(--text); }
 
-    em {
-      font-style: italic;
-      color: var(--violet);
-    }
+    em { font-style: italic; color: var(--plum); }
 
     /* Callout / quote blocks */
     blockquote {
-      background: rgba(124,58,237,0.06);
-      border-left: 4px solid var(--violet);
-      border-radius: 0 12px 12px 0;
-      padding: 18px 22px;
+      background: var(--accent-light);
+      border-radius: 12px;
+      padding: 20px 24px;
       margin: 16px 0;
+      border: none;
     }
 
     blockquote p {
-      color: var(--primary);
+      color: var(--plum);
       font-weight: 600;
       font-style: italic;
       font-size: 14px;
@@ -257,19 +259,17 @@ export function wrapInHtml(content: string, title?: string): string {
       margin: 16px 0;
       border-radius: 12px;
       overflow: hidden;
-      border: 1.5px solid var(--border-light);
+      border: 1.5px solid var(--border);
     }
 
     th {
-      background: var(--bg);
+      background: var(--lilac-pale);
       font-weight: 700;
-      color: var(--primary);
+      color: var(--plum);
       padding: 12px 16px;
       text-align: left;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      border-bottom: 1.5px solid var(--border);
+      font-size: 12px;
+      border-bottom: 2px solid var(--accent);
     }
 
     td {
@@ -285,11 +285,12 @@ export function wrapInHtml(content: string, title?: string): string {
     /* Dotted divider */
     hr {
       border: none;
-      border-top: 1px solid var(--border-light);
-      margin: 28px 0;
+      border-top: 2px dotted var(--text-m);
+      margin: 24px 0;
+      opacity: 0.2;
     }
 
-    /* ---- FOOTER ---- */
+    /* ---- FOOTER — Plum purple background ---- */
     .page-footer {
       position: fixed;
       bottom: 0;
@@ -297,8 +298,8 @@ export function wrapInHtml(content: string, title?: string): string {
       right: 0;
       padding: 14px 50px;
       font-size: 9px;
-      color: rgba(255,255,255,0.5);
-      background: var(--dark-bg);
+      color: rgba(255,255,255,0.7);
+      background: var(--plum);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -320,17 +321,20 @@ export function wrapInHtml(content: string, title?: string): string {
       <span class="tagline">${BRAND.tagline}</span>
     </div>
     <div class="cover-content">
-      <div class="cover-badge">Edge Sales Document</div>
       <div class="cover-title">${docTitle}</div>
-      <div class="cover-subtitle">
+      <hr class="cover-dotted-line" />
+      <div class="cover-description">
         ${BRAND.subtitle}. Edge provides dedicated, campus-based professionals who integrate into your workflows — fully managed, HIPAA compliant, and ready from day one.
+      </div>
+      <div class="cover-callout">
+        <p>"Edge is in a tier of their own and then there's everybody else." — Jose Melendez, President, Melendez Insurance Group</p>
       </div>
     </div>
     <div class="cover-stats">
-      <div class="cover-stat"><div class="number">97%</div><div class="label">Retention Rate</div></div>
-      <div class="cover-stat"><div class="number">7 days</div><div class="label">Avg. Match Time</div></div>
-      <div class="cover-stat"><div class="number">60-70%</div><div class="label">Cost Savings</div></div>
-      <div class="cover-stat"><div class="number">2-4%</div><div class="label">Acceptance Rate</div></div>
+      <div class="cover-stat"><div class="number">97%</div><div class="label">retention rate</div></div>
+      <div class="cover-stat"><div class="number">7 days</div><div class="label">avg. match time</div></div>
+      <div class="cover-stat"><div class="number">60-70%</div><div class="label">cost savings</div></div>
+      <div class="cover-stat"><div class="number">2-4%</div><div class="label">acceptance rate</div></div>
     </div>
   </div>
 
@@ -344,7 +348,7 @@ export function wrapInHtml(content: string, title?: string): string {
     ${content}
   </div>
 
-  <!-- FOOTER -->
+  <!-- FOOTER — Plum purple with white text -->
   <div class="page-footer">
     <div>
       <img src="${logoWhiteBase64}" alt="${BRAND.company}" />
