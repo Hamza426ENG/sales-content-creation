@@ -21,7 +21,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use('/api', contentRoutes);
 
 app.get('/health', (_req, res) => {
-  res.json({ status: 'ok' });
+  res.json({ status: 'ok', version: 'v3-brand-overhaul' });
 });
 
 app.use(errorHandler);

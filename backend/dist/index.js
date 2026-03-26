@@ -21,7 +21,7 @@ app.use((0, cors_1.default)({ origin: allowedOrigins }));
 app.use(express_1.default.json({ limit: '10mb' }));
 app.use('/api', content_1.default);
 app.get('/health', (_req, res) => {
-    res.json({ status: 'ok' });
+    res.json({ status: 'ok', version: 'v3-brand-overhaul' });
 });
 app.use(errorHandler_1.errorHandler);
 app.listen(PORT, () => {
