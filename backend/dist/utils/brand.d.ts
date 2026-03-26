@@ -35,9 +35,8 @@ export declare const BRAND: {
         body: string;
     };
 };
-export declare function getLogoSvgPath(): string;
-export declare function getLogoSvg(): string;
 export declare function getLogoBase64(): string;
 export declare function getLogoWhiteBase64(): string;
 export declare function getLogoPurpleBase64(): string;
+export declare function getLogoSvgPath(): string;
 //# sourceMappingURL=brand.d.ts.map
