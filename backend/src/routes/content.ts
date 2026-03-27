@@ -1,7 +1,8 @@
 import { Router, Request, Response } from 'express';
 import { z } from 'zod';
 import { validate } from '../middleware/validate';
-import { generateSalesContent } from '../services/claude';
+import { generateSalesContent, refineSalesContent } from '../services/claude';
+import { wrapInHtml } from '../utils/htmlTemplate';
 import { generatePdf } from '../services/pdfGenerator';
 import { generateWord } from '../services/wordGenerator';
 import { generatePpt } from '../services/pptGenerator';
@@ -60,6 +61,40 @@ router.post('/download', validate(downloadSchema), async (req: Request, res: Res
   } catch (error) {
     console.error('Download error:', error);
     res.status(500).json({ error: 'Failed to generate document' });
+  }
+});
+
+// Preview branded HTML
+const previewSchema = z.object({
+  content: z.string().min(1, 'Content is required'),
+});
+
+router.post('/preview', validate(previewSchema), async (req: Request, res: Response) => {
+  try {
+    const { content } = req.body;
+    const titleMatch = content.match(/<h1[^>]*>(.*?)<\/h1>/i);
+    const title = titleMatch ? titleMatch[1].replace(/<[^>]*>/g, '') : 'Sales Content';
+    res.json({ html: wrapInHtml(content, title) });
+  } catch (error) {
+    console.error('Preview error:', error);
+    res.status(500).json({ error: 'Failed to generate preview' });
+  }
+});
+
+// Refine content with feedback
+const refineSchema = z.object({
+  content: z.string().min(1, 'Content is required'),
+  feedback: z.string().min(1, 'Feedback is required'),
+});
+
+router.post('/refine', validate(refineSchema), async (req: Request, res: Response) => {
+  try {
+    const { content, feedback } = req.body;
+    const refinedContent = await refineSalesContent(content, feedback);
+    res.json({ content: refinedContent });
+  } catch (error) {
+    console.error('Refine error:', error);
+    res.status(500).json({ error: 'Failed to refine content' });
   }
 });
 

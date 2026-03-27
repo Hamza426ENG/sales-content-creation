@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.refineSalesContent = refineSalesContent;
 exports.generateSalesContent = generateSalesContent;
 const sdk_1 = __importDefault(require("@anthropic-ai/sdk"));
 const client = new sdk_1.default({
@@ -64,6 +65,31 @@ Healthcare, Dental, Insurance, Accounting, Physical Therapy, Veterinary
 - Use tables for comparisons
 - Structure: headline > subtitle > challenges/solutions > stats > roles > compliance > testimonial > CTA
 `;
+async function refineSalesContent(existingContent, feedback) {
+    const response = await client.messages.create({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 4096,
+        system: 'You are a sales content specialist for Edge (onedge.co). You will be given existing HTML sales content and user feedback. ' +
+            'Refine and update the existing HTML content based on the user\'s feedback. ' +
+            'Output well-structured HTML using headings (<h1>, <h2>, <h3>), paragraphs (<p>), lists (<ul>, <ol>), ' +
+            'bold (<strong>), italic (<em>), blockquotes (<blockquote>), and tables where appropriate. ' +
+            'Do NOT include <html>, <head>, or <body> wrapper tags — just the inner content HTML. ' +
+            'Do NOT wrap the output in markdown code blocks. Just output raw HTML directly. ' +
+            'Preserve the overall structure and brand alignment unless the feedback explicitly asks to change it. ' +
+            BRAND_GUIDELINES,
+        messages: [
+            {
+                role: 'user',
+                content: `Here is the existing sales content:\n\n${existingContent}\n\nPlease refine this content based on the following feedback:\n\n${feedback}`,
+            },
+        ],
+    });
+    const textBlock = response.content.find((block) => block.type === 'text');
+    if (!textBlock || textBlock.type !== 'text') {
+        throw new Error('No text content in Claude response');
+    }
+    return textBlock.text;
+}
 async function generateSalesContent(prompt) {
     const response = await client.messages.create({
         model: 'claude-sonnet-4-20250514',

@@ -13,6 +13,28 @@ export async function generateContent(prompt: string, format: string) {
   return res.json();
 }
 
+export async function getPreviewHtml(content: string): Promise<string> {
+  const res = await fetch(`${API_URL}/api/preview`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ content }),
+  });
+  if (!res.ok) throw new Error('Failed to get preview');
+  const data = await res.json();
+  return data.html;
+}
+
+export async function refineContent(content: string, feedback: string): Promise<string> {
+  const res = await fetch(`${API_URL}/api/refine`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ content, feedback }),
+  });
+  if (!res.ok) throw new Error('Failed to refine content');
+  const data = await res.json();
+  return data.content;
+}
+
 export async function downloadDocument(content: string, format: string) {
   const res = await fetch(`${API_URL}/api/download`, {
     method: 'POST',
