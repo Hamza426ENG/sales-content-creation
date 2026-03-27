@@ -95,11 +95,10 @@ export function wrapInHtml(content: string, title?: string): string {
       margin: 0;
     }
 
-    /* Stats bar — Plum purple, positioned above fixed footer */
+    /* Stats bar — Plum purple */
     .cover-stats {
       background: #4A0F70;
-      padding: 24px 50px 40px; /* extra bottom padding so labels don't get clipped */
-      margin-bottom: 50px; /* space for fixed footer below */
+      padding: 24px 50px 30px;
       display: flex;
       justify-content: space-around;
       align-items: center;
@@ -116,37 +115,22 @@ export function wrapInHtml(content: string, title?: string): string {
       margin-top: 3px;
     }
 
-    /* Cover footer — hidden since fixed page-footer covers all pages */
-    .cover-footer { display: none; }
-
-    /* ========== CONTENT PAGES ========== */
-    .content-page {
-      padding: 0 0 60px;
-      page-break-before: auto;
-    }
-
-    .page-header {
+    /* Cover footer */
+    .cover-footer {
+      background: #4A0F70;
+      padding: 12px 50px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 20px 50px;
-      border-bottom: 1px solid #F0F0F4;
-      margin-bottom: 10px;
-    }
-    .page-header img { height: 22px; }
-    .page-header .badge {
       font-size: 9px;
-      color: #4A0F70;
-      border: 1.5px solid #4A0F70;
-      border-radius: 100px;
-      padding: 4px 14px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
+      color: rgba(255,255,255,0.75);
     }
+    .cover-footer img { height: 14px; }
 
+    /* ========== CONTENT PAGES ========== */
+    /* Header/footer are rendered by Puppeteer in margin space — no overlap */
     .content-body {
-      padding: 10px 50px 100px; /* extra bottom padding for footer */
+      padding: 10px 50px 20px;
     }
 
     /* Typography */
@@ -252,26 +236,7 @@ export function wrapInHtml(content: string, title?: string): string {
       opacity: 0.25;
     }
 
-    /* ========== PAGE FOOTER — fixed on every page except cover ========== */
-    .page-footer {
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      padding: 12px 50px;
-      font-size: 9px;
-      color: rgba(255,255,255,0.75);
-      background: #4A0F70;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .page-footer img { height: 14px; }
-    .footer-right { text-align: right; }
-
-    /* Hide fixed footer on cover page (cover has its own footer) */
-    .cover-page ~ .page-footer { display: flex; }
-    @media print {
-      .cover-page { page-break-after: always; }
-    }
+    /* Footer/header handled by Puppeteer margin templates */
   </style>
 </head>
 <body>
@@ -310,27 +275,9 @@ export function wrapInHtml(content: string, title?: string): string {
     </div>
   </div>
 
-  <!-- CONTENT PAGES -->
-  <div class="content-page">
-    <div class="page-header">
-      <img src="${logoPurpleBase64}" alt="${BRAND.company}" />
-      <span class="badge">${BRAND.tagline}</span>
-    </div>
-    <div class="content-body">
-      ${content}
-    </div>
-  </div>
-
-  <!-- FIXED FOOTER on content pages -->
-  <div class="page-footer">
-    <div>
-      <img src="${logoWhiteBase64}" alt="${BRAND.company}" />
-      <div style="margin-top:2px">${BRAND.address}</div>
-      <div>${BRAND.website}</div>
-    </div>
-    <div class="footer-right">
-      &copy; ${new Date().getFullYear()} ${BRAND.fullName}.<br/>All rights reserved.
-    </div>
+  <!-- CONTENT (header/footer rendered by Puppeteer in margins) -->
+  <div class="content-body">
+    ${content}
   </div>
 
 </body>
